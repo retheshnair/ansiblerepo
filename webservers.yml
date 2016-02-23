@@ -1,0 +1,19 @@
+--- #MASTER PLAYBOOK FOR WEBSERVERS
+- hosts: web 
+  user: vagrant
+  sudo: yes
+  connection: ssh
+  gather_facts: yes
+  pre_tasks:
+  - name: When did the Role Start
+    raw: date > /home/vagrant/startofrole.log
+  - name: Ping the server
+    raw: ping -c 4 web > /home/vagrant/Playbooks/Roles/roles/ping.out
+    delegate_to: 127.0.0.1
+  - name: Ping the server using local action
+    local_action: raw ping -c 4 web > /home/vagrant/Playbooks/Roles/roles/ping_localaction.out
+  roles:
+    - webservers
+  post_tasks:
+  - name: When did the ROLE end
+    raw: date > /home/vagrant/endofrole.log

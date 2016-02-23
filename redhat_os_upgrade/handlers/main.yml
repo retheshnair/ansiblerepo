@@ -1,0 +1,6 @@
+ - name: RESTART SERVER
+   shell: sleep 2  && shutdown -r now  "Reboot using Ansible post patching
+   async: 1
+   poll: 0
+   sudo: true
+   ignore_errors: true

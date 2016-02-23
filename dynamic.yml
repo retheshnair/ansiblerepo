@@ -1,0 +1,14 @@
+--- #MASTER PLAYBOOK FOR WEBSERVERS
+- hosts: '{{ hosts }}'
+  user: '{{ users }}'
+  sudo: yes
+  connection: ssh
+  gather_facts: yes
+  pre_tasks:
+  - name: When did the Role Start
+    raw: date > /home/vagrant/startofrole.log
+  roles:
+    - { role: '{{ role }}' }
+  post_tasks:
+  - name: When did the ROLE end
+    raw: date > /home/vagrant/endofrole.log

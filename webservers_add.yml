@@ -1,0 +1,14 @@
+--- #MASTER PLAYBOOK FOR WEBSERVERS
+- hosts: web
+  user: vagrant
+  sudo: yes
+  connection: ssh
+  gather_facts: no
+  pre_tasks:
+  - name: When did The ROLE started 
+    raw: date > /home/vagrant/startofrole.log
+  roles:
+    - webservers
+  post_tasks:
+    - name: When did The ROLE stopped
+      raw: date > /home/vagrant/stopofrole.log

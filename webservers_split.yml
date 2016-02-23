@@ -1,0 +1,15 @@
+--- #MASTER PLAYBOOK FOR WEBSERVERS
+- hosts: web 
+  user: vagrant
+  sudo: yes
+  connection: ssh
+  gather_facts: yes
+  pre_tasks:
+  - name: When did the Role Start
+    raw: date > /home/vagrant/startofrole.log
+  roles:
+    - { role: redhat_webservers, when: "ansible_os_family == 'RedHat'" }
+    - { role: redhat_webservers, when: "ansible_os_family == 'Debian'" }
+  post_tasks:
+  - name: When did the ROLE end
+    raw: date > /home/vagrant/endofrole.log
