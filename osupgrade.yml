@@ -1,0 +1,32 @@
+---
+# Upgrade VMs
+- hosts: db
+  vars:
+   var_remote_user: vagrant
+   var_sudo: yes
+   async_time: 7200
+   poll_time: 15
+  remote_user: "{{ var_remote_user }}"
+  sudo: "{{ var_sudo }}"
+  connection: ssh
+  gather_facts: yes
+  tasks:
+  - name: Upgrade the RedHat OS
+    when: ansible_os_family == "RedHat"
+    yum: name=* state=latest
+    async: 7200
+    poll: 15
+    notify: RESTART SERVER
+  - name: Upgrade the Debian OS
+    when: ansible_os_family == "Debian"    
+    apt:  upgrade=dist update_cache=yes
+    async: 7200
+    poll: 15
+    notify: RESTART SERVER
+  handlers:
+    - name: RESTART SERVER
+      shell: sleep 2 && shutdown -r now "Ansible Kernel updates triggered"
+      async: 1
+      poll: 0
+      sudo: true
+      ignore_errors: true
